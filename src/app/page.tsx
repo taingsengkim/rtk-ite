@@ -1,10 +1,12 @@
+import ButtonComponent from "@/components/ButtonComponent";
+import ShowCount from "@/components/ShowCount";
 import { Card } from "@/components/ui/card";
-import Image from "next/image";
 
 export default function Home() {
   return (
     <div>
-      <Card />
+      <ShowCount />
+      <ButtonComponent />
     </div>
   );
 }
