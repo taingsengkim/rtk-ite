@@ -21,6 +21,10 @@ export const columns: ColumnDef<FakeStoreProductType>[] = [
         </Button>
       );
     },
+    filterFn: (row, columnId, filterValue) => {
+      const cellValue = row.getValue(columnId) as number;
+      return cellValue.toString().includes(filterValue);
+    },
   },
   {
     header: "Image",
@@ -37,14 +41,46 @@ export const columns: ColumnDef<FakeStoreProductType>[] = [
   },
   {
     accessorKey: "title",
-    header: "Title",
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Title
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      );
+    },
   },
   {
     accessorKey: "slug",
-    header: "Slug",
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Slug
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      );
+    },
   },
   {
-    header: "Category",
+    accessorKey: "category",
+
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Category
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      );
+    },
     cell: ({ row }) => row.original.category?.name,
   },
   {
@@ -60,7 +96,11 @@ export const columns: ColumnDef<FakeStoreProductType>[] = [
         </Button>
       );
     },
-    cell: ({ row }) => `$${row.original.price}`,
+    cell: ({ row }) => row.getValue("price"),
+    filterFn: (row, columnId, filterValue) => {
+      const cellValue = row.getValue(columnId) as number;
+      return cellValue.toString().includes(filterValue);
+    },
   },
 
   //   {

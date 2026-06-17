@@ -47,6 +47,8 @@ export function DataTable<TData extends BaseTableData, TValue>({
     pageIndex: 0,
     pageSize: 10,
   });
+  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
+  const [filterColumn, setFilterColumn] = useState("all");
   const table = useReactTable({
     data,
     columns,
@@ -56,22 +58,62 @@ export function DataTable<TData extends BaseTableData, TValue>({
     getPaginationRowModel: getPaginationRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
     onPaginationChange: setPagination,
+    onColumnFiltersChange: setColumnFilters,
+
     state: {
       globalFilter,
       sorting,
       pagination,
+      columnFilters,
     },
     onGlobalFilterChange: setGlobalFilter,
   });
-
+  const handleFilterColumnChange = (newColumn: string) => {
+    if (filterColumn === "all") {
+      setGlobalFilter("");
+      table.setGlobalFilter("");
+    } else {
+      table.getColumn(filterColumn)?.setFilterValue(undefined);
+    }
+    setFilterColumn(newColumn);
+  };
   return (
     <div className="overflow-hidden rounded-md border">
-      <div className="flex items-center py-4 p-4">
+      <div className="flex gap-2 p-4">
+        <select
+          value={filterColumn}
+          onChange={(e) => handleFilterColumnChange(e.target.value)}
+          className="border px-2 py-1 rounded-4xl"
+        >
+          <option value="all">All</option>
+          <option value="id">Id</option>
+          <option value="title">Title</option>
+          <option value="slug">Slug</option>
+          <option value="category">Category</option>
+          <option value="price">Price</option>
+        </select>
+
         <Input
-          value={globalFilter ?? ""}
-          onChange={(e) => table.setGlobalFilter(String(e.target.value))}
-          placeholder="Search..."
-          className="max-w-sm"
+          placeholder={
+            filterColumn === "all"
+              ? "Search all..."
+              : `Search ${filterColumn}...`
+          }
+          value={
+            filterColumn === "all"
+              ? (globalFilter ?? "")
+              : ((table.getColumn(filterColumn)?.getFilterValue() as string) ??
+                "")
+          }
+          onChange={(e) => {
+            const value = e.target.value;
+            if (filterColumn === "all") {
+              setGlobalFilter(value);
+              table.setGlobalFilter(value);
+            } else {
+              table.getColumn(filterColumn)?.setFilterValue(value);
+            }
+          }}
         />
       </div>
       <Table>
