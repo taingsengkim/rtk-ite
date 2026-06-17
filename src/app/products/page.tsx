@@ -1,4 +1,5 @@
 import { CardComponent } from "@/components/CardProductComponent";
+import ProductRender from "@/components/ProductRender";
 import { addToCart, CartItem } from "@/lib/features/cartSlice/cartSlice";
 import React from "react";
 import { useDispatch } from "react-redux";
@@ -40,12 +41,15 @@ export default function ProductPage() {
   ];
 
   return (
-    <div className="grid grid-cols-4 gap-5">
-      {items.map((item) => (
-        <div key={item.id}>
-          <CardComponent props={item} />
-        </div>
-      ))}
+    <div className="flex flex-col gap-5">
+      <div className="grid grid-cols-4 gap-5">
+        {items?.map((item) => (
+          <div key={item.id}>
+            <CardComponent props={item} />
+          </div>
+        ))}
+      </div>
+      <ProductRender />
     </div>
   );
 }

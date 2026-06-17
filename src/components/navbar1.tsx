@@ -71,6 +71,10 @@ const Navbar1 = ({
       title: "Products",
       url: "/products",
     },
+    {
+      title: "Products Table",
+      url: "/products-table",
+    },
   ],
   auth = {
     login: { title: "Login", url: "#" },
